@@ -1,16 +1,12 @@
 import express from "express";
-import path from "path";
 import sql from "../connect.js";
 import { google } from "googleapis";
-import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import jwtCheck from "../middlewares/auth.js";
 
 dotenv.config();
 
 const router = express.Router();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const auth = new google.auth.JWT({
   email: process.env.GOOGLE_CLIENT_EMAIL,
