@@ -7,6 +7,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import "./subject.css";
 
 const Subject = () => {
+  const audience = import.meta.env.VITE_AUTH0_API_IDENTIFIER;
+
   const navigate = useNavigate();
   const location = useLocation();
   const subject = location.state?.subjectName || "No subject chosen";
@@ -29,16 +31,24 @@ const Subject = () => {
     }
   }, [subject]);
 
-  const handleClick = (id) => {
-    setModelOpen(true);
-    setChapterId(id);
+  const handleClick = async (id) => {
+    if (!isAuthenticated || !user) {
+      await loginWithPopup({
+        authorizationParams: {
+          audience: audience,
+          scope: "openid profile email offline_access",
+        },
+      });
+    } else {
+      setModelOpen(true);
+      setChapterId(id);
+    }
   };
 
   const { user, isAuthenticated, loginWithPopup } = useAuth0();
 
   const handleBuy = async (chapter, amount) => {
-    const audience = import.meta.env.VITE_AUTH0_API_IDENTIFIER;
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !user) {
       try {
         await loginWithPopup({
           authorizationParams: {
@@ -49,46 +59,46 @@ const Subject = () => {
       } catch (error) {
         console.error("Login failed:", error);
       }
-    }
+    } else {
+      const res = await makeRequest.post("/payment", {
+        amount,
+      });
 
-    const res = await makeRequest.post("/payment", {
-      amount,
-    });
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_API_KEY,
+        amount: amount,
+        currency: "INR",
+        name: "Rubisco Med Ed",
+        description: "",
+        order_id: res.data.order.id,
+        handler: async function (response) {
+          try {
+            const verification = await makeRequest.post("/payment/verify", {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              user_id: user.sub,
+              chapter_id: chapter.id,
+            });
 
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_API_KEY,
-      amount: amount,
-      currency: "INR",
-      name: "Rubisco Med Ed",
-      description: "",
-      order_id: res.data.order.id,
-      handler: async function (response) {
-        try {
-          const verification = await makeRequest.post("/payment/verify", {
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_signature: response.razorpay_signature,
-            user_id: user.sub,
-            chapter_id: chapter.id,
-          });
-
-          if (verification.data.status === "success") {
-            navigate("/payment-success", { state: { verified: true } });
-          } else {
+            if (verification.data.status === "success") {
+              navigate("/payment-success", { state: { verified: true } });
+            } else {
+              navigate("/payment-failure", { state: { verified: true } });
+            }
+          } catch (error) {
+            console.error("Error verifying payment:", error);
             navigate("/payment-failure", { state: { verified: true } });
           }
-        } catch (error) {
-          console.error("Error verifying payment:", error);
-          navigate("/payment-failure", { state: { verified: true } });
-        }
-      },
-      theme: {
-        color: "#a240e0",
-      },
-    };
+        },
+        theme: {
+          color: "#a240e0",
+        },
+      };
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    }
   };
 
   return (

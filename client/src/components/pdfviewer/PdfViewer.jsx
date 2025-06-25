@@ -159,7 +159,13 @@ const PdfViewer = ({ chapterId }) => {
           Next
         </button>
       </div>
-      {loading && <div className="pdf-loading">Loading PDF...</div>}
+
+      {loading && (
+        <div className="pdf-loading">
+          <img src="/loading.gif" alt="Loading..." className="loading-gif" />
+          <span>Untangling your DNA... please wait 🧬</span>
+        </div>
+      )}
 
       {error && <div className="pdf-error">{error}</div>}
 
