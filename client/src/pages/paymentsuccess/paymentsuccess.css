@@ -1,0 +1,54 @@
+/* payment.css */
+
+.paymentContainer {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f0fa;
+  padding: 1rem;
+}
+
+.paymentCard {
+  background-color: #ffffff;
+  padding: 3rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(162, 64, 224, 0.15);
+  max-width: 500px;
+  width: 100%;
+}
+
+.paymentCard h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #4b1f6d;
+}
+
+.paymentCard p {
+  font-size: 1.1rem;
+  color: #5e3c83;
+  margin-bottom: 2rem;
+}
+
+.paymentBtn {
+  background-color: #a240e0;
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.paymentBtn:hover {
+  background-color: #7a1fb3;
+  box-shadow: 0 4px 12px rgba(122, 31, 179, 0.2);
+  text-decoration: none;
+}
+
+.success .paymentCard {
+  border-left: 6px solid #4caf50; /* Green success stripe */
+}

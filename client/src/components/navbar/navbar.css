@@ -1,0 +1,90 @@
+.navbarContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #fff;
+  border-bottom: 2px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  z-index: 100;
+  color: white;
+}
+
+.navbarContainer p {
+  user-select: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #9b4dcc;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rubisco::before {
+  content: "";
+  display: inline-block;
+  background-image: url("C:\Users\Asus\Rubisco\client\assests\RuBisCo_20250426_172347_0000.png"); /* Replace with correct path */
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 35px;
+  height: 35px;
+}
+
+.signInBtn {
+  background-color: #9b4dcc;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.signInBtn:hover,
+.signOutBtn:hover {
+  background-color: #7e39b1;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  position: relative;
+  display: inline-block;
+  user-select: none;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.username {
+  margin-right: 0.5rem;
+}
+
+.userImg {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.signOutBtn {
+  background-color: #9b4dcc;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  z-index: 999;
+  white-space: nowrap;
+}

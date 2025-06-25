@@ -1,0 +1,69 @@
+/* Container for the viewer */
+.pdfViewerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  background-color: #f7f0fa; /* Rubisco soft lavender */
+  color: #4b1f6d;
+}
+
+/* Control bar */
+.pdfControls {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  border: 2px solid #a240e0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(162, 64, 224, 0.1);
+  z-index: 10; /* Ensure it's above the canvas */
+}
+
+/* Buttons */
+.pdfControls button {
+  background-color: #a240e0;
+  border: none;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.pdfControls button:disabled {
+  background-color: #d2b1eb;
+  cursor: not-allowed;
+}
+
+.pdfControls button:hover:not(:disabled) {
+  background-color: #7a1fb3;
+}
+
+/* Page number input */
+.pdfControls input {
+  width: 50px;
+  height: 28px;
+  text-align: center;
+  border: 1px solid #a240e0;
+  border-radius: 4px;
+  outline: none;
+  font-size: 1rem;
+  color: #4b1f6d;
+  background-color: #fff;
+}
+
+/* Canvas styles */
+canvas {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(162, 64, 224, 0.05);
+  max-width: 100%;
+  height: auto;
+}
