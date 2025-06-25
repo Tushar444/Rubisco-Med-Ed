@@ -28,7 +28,7 @@
 .rubisco::before {
   content: "";
   display: inline-block;
-  background-image: url("C:\Users\Asus\Rubisco\client\assests\RuBisCo_20250426_172347_0000.png"); /* Replace with correct path */
+  background-image: url("/RuBisCo_20250426_172347_0000.png");
   background-size: contain;
   background-repeat: no-repeat;
   width: 35px;
