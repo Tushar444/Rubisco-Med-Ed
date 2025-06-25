@@ -79,7 +79,7 @@ const Subject = () => {
           }
         } catch (error) {
           console.error("Error verifying payment:", error);
-          navigate("/payment-failure");
+          navigate("/payment-failure", { state: { verified: true } });
         }
       },
       theme: {
