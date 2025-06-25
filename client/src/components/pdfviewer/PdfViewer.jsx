@@ -17,11 +17,6 @@ const PdfViewer = ({ chapterId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") goToNextPage();
-    else if (e.key === "ArrowLeft") goToPrevPage();
-  });
-
   useEffect(() => {
     const fetchPdf = async () => {
       setLoading(true);
