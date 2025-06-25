@@ -10,12 +10,30 @@ pdfjsLib.GlobalWorkerOptions.workerPort = new pdfjsWorker();
 const PdfViewer = ({ chapterId }) => {
   const { getAccessTokenSilently, loginWithRedirect } = useAuth0();
   const canvasRef = useRef();
+  const containerRef = useRef();
   const [pdf, setPdf] = useState(null);
   const [pageNum, setPageNum] = useState(1);
   const [inputPage, setInputPage] = useState("1");
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const handleFullscreen = () => {
+    const container = containerRef.current;
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.webkitRequestFullscreen) {
+      container.webkitRequestFullscreen();
+    } else if (container.msRequestFullscreen) {
+      container.msRequestFullscreen();
+    }
+  };
+
+  useEffect(() => {
+    const handleContextMenu = (e) => e.preventDefault();
+    document.addEventListener("contextmenu", handleContextMenu);
+    return () => document.removeEventListener("contextmenu", handleContextMenu);
+  }, []);
 
   useEffect(() => {
     const fetchPdf = async () => {
@@ -140,7 +158,7 @@ const PdfViewer = ({ chapterId }) => {
   };
 
   return (
-    <div className="pdfViewerContainer">
+    <div className="pdfViewerContainer" ref={containerRef}>
       <div className="pdfControls">
         <button onClick={goToPrevPage} disabled={pageNum <= 1}>
           Prev
@@ -157,6 +175,9 @@ const PdfViewer = ({ chapterId }) => {
         </span>
         <button onClick={goToNextPage} disabled={pageNum >= totalPages}>
           Next
+        </button>
+        <button onClick={handleFullscreen} className="fullscreen-btn">
+          ⛶
         </button>
       </div>
 
