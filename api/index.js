@@ -37,7 +37,7 @@ app.use(
   })
 );
 
-// app.use("/api/", apiLimiter);
+app.use("/api/", apiLimiter);
 app.use("/api/notes", notesRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/user", userRoutes);
