@@ -58,7 +58,7 @@ const PdfViewer = ({ chapterId }) => {
         if (error.response?.status === 401 || error.response?.status === 403) {
           setError("You haven't purchased this item.");
         } else {
-          setError("Something went wrong while fetching the PDF.");
+          setError("Something went wrong. Please try again");
         }
       } finally {
         setLoading(false);

@@ -15,14 +15,21 @@ const Subject = () => {
   const [modelOpen, setModelOpen] = useState(false);
   const [chapterId, setChapterId] = useState(0);
   const [chapters, setChapters] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchChapters = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const res = await makeRequest.get(`/chapters/${subject}`);
         setChapters(res.data);
       } catch (err) {
         console.error("Error fetching chapters:", err);
+        setError("Something went wrong. Please try again");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -106,23 +113,38 @@ const Subject = () => {
       <Navbar />
       <div className="subjectName">{subject}</div>
       <div className="chapterListWrapper">
-        <div className="chapterList">
-          <ul>
-            {chapters.map((chapter, index) => (
-              <div key={index} className="chapter">
-                <li onClick={() => handleClick(chapter.id)}>
-                  {chapter.chapter_name}
-                </li>
-                <button
-                  className="buyBtn"
-                  onClick={() => handleBuy(chapter, chapter.price)}
-                >
-                  ₹{chapter.price}
-                </button>
-              </div>
-            ))}
-          </ul>
-        </div>
+        {loading && (
+          <div className="chapter-loading">
+            <img
+              src="/microscope.png"
+              alt="Loading..."
+              className="loading-icon"
+            />
+            <span>Locating your notes at the molecular level! 🔬</span>
+          </div>
+        )}
+
+        {error && <div className="chapter-error">{error}</div>}
+
+        {!loading && !error && (
+          <div className="chapterList">
+            <ul>
+              {chapters.map((chapter, index) => (
+                <div key={index} className="chapter">
+                  <li onClick={() => handleClick(chapter.id)}>
+                    {chapter.chapter_name}
+                  </li>
+                  <button
+                    className="buyBtn"
+                    onClick={() => handleBuy(chapter, chapter.price)}
+                  >
+                    ₹{chapter.price}
+                  </button>
+                </div>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
       {modelOpen && (
         <div className="modalOverlay" onClick={() => setModelOpen(false)}>
