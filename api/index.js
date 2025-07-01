@@ -6,6 +6,7 @@ import paymentRoutes from "./routes/payment.js";
 import userRoutes from "./routes/user.js";
 import subjectsRoutes from "./routes/subjects.js";
 import chaptersRoutes from "./routes/chapters.js";
+import purchasesRoutes from "./routes/purchases.js";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
 
@@ -46,6 +47,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/subjects", subjectsRoutes);
 app.use("/api/chapters", chaptersRoutes);
+app.use("/api/purchases", purchasesRoutes);
 
 app.listen(PORT, async () => {
   console.log(`Server running at http://localhost:${PORT}`);

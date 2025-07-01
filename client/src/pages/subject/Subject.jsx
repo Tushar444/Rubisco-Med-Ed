@@ -15,8 +15,12 @@ const Subject = () => {
   const [modelOpen, setModelOpen] = useState(false);
   const [chapterId, setChapterId] = useState(0);
   const [chapters, setChapters] = useState([]);
+  const [purchasedChapters, setPurchasedChapters] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const { user, isAuthenticated, loginWithPopup, getAccessTokenSilently } =
+    useAuth0();
 
   useEffect(() => {
     const fetchChapters = async () => {
@@ -38,6 +42,27 @@ const Subject = () => {
     }
   }, [subject]);
 
+  useEffect(() => {
+    const fetchPurchased = async () => {
+      if (!isAuthenticated || !user) return;
+
+      try {
+        const token = await getAccessTokenSilently();
+        const res = await makeRequest.get(`/purchases/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const purchasedIds = res.data.purchasedChapters;
+        setPurchasedChapters(purchasedIds);
+      } catch (err) {
+        console.error("Error fetching purchases:", err);
+      }
+    };
+
+    fetchPurchased();
+  }, [user, isAuthenticated, getAccessTokenSilently]);
+
   const handleClick = async (id) => {
     if (!isAuthenticated || !user) {
       await loginWithPopup({
@@ -51,8 +76,6 @@ const Subject = () => {
       setChapterId(id);
     }
   };
-
-  const { user, isAuthenticated, loginWithPopup } = useAuth0();
 
   const handleBuy = async (chapter, amount) => {
     if (!isAuthenticated || !user) {
@@ -129,19 +152,27 @@ const Subject = () => {
         {!loading && !error && (
           <div className="chapterList">
             <ul>
-              {chapters.map((chapter, index) => (
-                <div key={index} className="chapter">
-                  <li onClick={() => handleClick(chapter.id)}>
-                    {chapter.chapter_name}
-                  </li>
-                  <button
-                    className="buyBtn"
-                    onClick={() => handleBuy(chapter, chapter.price)}
+              {chapters.map((chapter, index) => {
+                const isBought = purchasedChapters.includes(chapter.id);
+                return (
+                  <div
+                    key={index}
+                    className={`chapter${isBought ? "-bought-chapter" : ""}`}
                   >
-                    ₹{chapter.price}
-                  </button>
-                </div>
-              ))}
+                    <li onClick={() => handleClick(chapter.id)}>
+                      {chapter.chapter_name}
+                    </li>
+                    {!isBought && (
+                      <button
+                        className="buyBtn"
+                        onClick={() => handleBuy(chapter, chapter.price)}
+                      >
+                        ₹{chapter.price}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
             </ul>
           </div>
         )}
