@@ -15,6 +15,11 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
+// health check route for render
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
+});
+
 app.set("trust proxy", 1);
 
 const apiLimiter = rateLimit({
