@@ -34,8 +34,6 @@ app.use(
     credentials: true,
   })
 );
-// Handles preflight OPTIONS requests
-app.options("*", cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
