@@ -28,14 +28,17 @@ export const instance = new Razorpay({
   key_secret: process.env.RAZORPAY_API_SECRET,
 });
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-  })
-);
-// Fix CORS for preflight requests (needed for Authorization headers, etc.)
-app.options(/.*/, cors());
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+
+// Allow preflight responses too
+app.options(/.*/, cors(corsOptions));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
