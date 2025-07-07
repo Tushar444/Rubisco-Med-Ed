@@ -34,6 +34,8 @@ app.use(
     credentials: true,
   })
 );
+// Fix CORS for preflight requests (needed for Authorization headers, etc.)
+app.options(/.*/, cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
