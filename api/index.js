@@ -28,18 +28,17 @@ export const instance = new Razorpay({
   key_secret: process.env.RAZORPAY_API_SECRET,
 });
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );
+// Handles preflight OPTIONS requests
+app.options("*", cors());
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use("/api/", apiLimiter);
 app.use("/api/notes", notesRoutes);
