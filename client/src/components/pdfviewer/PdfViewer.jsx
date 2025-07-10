@@ -18,17 +18,6 @@ const PdfViewer = ({ chapterId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleFullscreen = () => {
-    const container = containerRef.current;
-    if (container.requestFullscreen) {
-      container.requestFullscreen();
-    } else if (container.webkitRequestFullscreen) {
-      container.webkitRequestFullscreen();
-    } else if (container.msRequestFullscreen) {
-      container.msRequestFullscreen();
-    }
-  };
-
   useEffect(() => {
     const handleContextMenu = (e) => e.preventDefault();
     document.addEventListener("contextmenu", handleContextMenu);
@@ -78,14 +67,16 @@ const PdfViewer = ({ chapterId }) => {
         const context = canvas.getContext("2d");
 
         const containerWidth =
-          window.innerWidth < 768
-            ? window.innerWidth * 0.9
-            : window.innerWidth * 0.5;
+          containerRef.current?.clientWidth || window.innerWidth;
+
         const unscaledViewport = page.getViewport({ scale: 1 });
-        const scale = containerWidth / unscaledViewport.width;
+
+        const maxDisplayWidth = Math.min(containerWidth, 960);
+
+        const scale = maxDisplayWidth / unscaledViewport.width;
+        const viewport = page.getViewport({ scale });
 
         const outputScale = window.devicePixelRatio || 1;
-        const viewport = page.getViewport({ scale });
 
         canvas.width = viewport.width * outputScale;
         canvas.height = viewport.height * outputScale;
@@ -175,9 +166,6 @@ const PdfViewer = ({ chapterId }) => {
         </span>
         <button onClick={goToNextPage} disabled={pageNum >= totalPages}>
           Next
-        </button>
-        <button onClick={handleFullscreen} className="fullscreen-btn">
-          ⛶
         </button>
       </div>
 

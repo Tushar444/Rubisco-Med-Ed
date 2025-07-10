@@ -38,7 +38,7 @@ const Navbar = () => {
 
   return (
     <div className="navbarContainer">
-      <p className="rubisco">Rubisco Med Ed</p>
+      <p className="rubisco">Rubisco Medical Library</p>
       {!isAuthenticated && (
         <button className="signInBtn" onClick={() => loginWithPopup()}>
           Sign In / Sign up
